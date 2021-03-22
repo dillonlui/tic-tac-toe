@@ -20,9 +20,9 @@ const gameBoard = (() => {
 
     Array.from(squares.children).forEach((square, index) => {
         square.addEventListener('click', () => {
-            square.classList.add(game.activePlayer.marker);
-            square.setAttribute('data', game.activePlayer.marker);
-            board[index] = game.activePlayer.marker;
+            square.classList.add(game.activePlayer.symbol);
+            square.setAttribute('data', game.activePlayer.symbol);
+            board[index] = game.activePlayer.symbol;
             square.style.pointerEvents = 'none';
             game.remainingSpots -= 1;
 
@@ -31,19 +31,28 @@ const gameBoard = (() => {
                 if (game.remainingSpots > 0) {
                     game.alertNextPlayer();
                     game.nextPlayer();
-                } else if (game.remainingSpots = 0) {
+                } else if (game.remainingSpots == 0) {
                     game.tieGame();
                 }
             }
         })
+    });
+
+    let reset = document.querySelector('.btnReset')
+    reset.addEventListener('click', () => {
+        location.reload();
+        return false;
     })
 
+    return {
+        board
+    };
 })();
 
 // Game Object
 const game = (() => {
-    const playerOne = createPlayer('Player One', 'X');
-    const playerTwo = createPlayer('Player Two', 'O');
+    const playerOne = createPlayer('Player 1', 'X');
+    const playerTwo = createPlayer('Player 2', 'O');
 
     let activePlayer = playerOne;
     let winnerDeclared = false;
@@ -65,17 +74,17 @@ const game = (() => {
 
     function checkWinner() {
         winningMoves.forEach((item, index) => {
-            if (gameBoard.board[item[0]] === this.activePlayer.marker &&
-                gameBoard.board[item[1]] === this.activePlayer.marker &&
-                gameBoard.board[item[2]] === this.activePlayer.marker) {
-                gameInfo.textContent = `${this.activePlayer.name} wins!`
+            if (gameBoard.board[item[0]] === this.activePlayer.symbol &&
+                gameBoard.board[item[1]] === this.activePlayer.symbol &&
+                gameBoard.board[item[2]] === this.activePlayer.symbol) {
+                gameInfo.innerHTML = `<b>${this.activePlayer.name} wins!</b>`
                 this.winnerDeclared = true;
             }
         })
     }
 
     function alertNextPlayer() {
-        this.activePlayer = playerOne ? playerName.textContent = 'Player 2' : playerName.textContent = 'Player 1';
+        this.activePlayer === playerOne ? playerName.textContent = 'Player 2' : playerName.textContent = 'Player 1';
     }
 
     function nextPlayer() {
